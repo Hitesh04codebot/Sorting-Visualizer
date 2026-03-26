@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Algorithm Visualizer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h5 style="font-size:40px; font-weight:bold; text-align:center;">SORTING VISUALIZER</h5>
+    <header class="control-panel">
+        <div class="controls">
+            <label for="algorithm-select">Algorithm:</label>
+            <select id="algorithm-select">
+                <option value="bubble">Bubble Sort</option>
+                <option value="selection">Selection Sort</option>
+                <option value="insertion">Insertion Sort</option>
+                <option value="merge">Merge Sort</option>
+                <option value="quick">Quick Sort</option>
+            </select>
+
+            <label for="size-slider">Number of Elements:</label>
+            <input type="range" id="size-slider" min="5" max="50" value="25">
+            <span id="slider-value">25</span>
+
+            <label for="speed-select">Speed:</label>
+            <select id="speed-select">
+                <option value="0.25">0.25x</option>
+                <option value="0.5">0.5x</option>
+                <option value="1" selected>1x</option>
+                <option value="1.25">1.25x</option>
+                <option value="1.75">1.75x</option>
+                <option value="2">2x</option>
+            </select>
+        </div>
+        
+        <div class="buttons">
+            <button id="generate-btn">Generate Array</button>
+            <button id="sort-btn">Sort</button>
+            <button id="pause-btn">Pause</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="visualization">
+            <div id="bars-container"></div>
+        </div>
+        <div class="info-panel">
+            <h2 id="algorithm-name">Algorithm: Bubble Sort</h2>
+            <div class="stats">
+                <p>Comparisons: <span id="comparisons">0</span></p>
+                <p>Swaps: <span id="swaps">0</span></p>
+                <p>Time Taken: <span id="time-taken">0.00 seconds</span></p>
+            </div>
+            <div class="complexity">
+                <h3>Time Complexity</h3>
+                <p>Best Case: <span id="best-case">O(n)</span></p>
+                <p>Average Case: <span id="average-case">O(n²)</span></p>
+                <p>Worst Case: <span id="worst-case">O(n²)</span></p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        Made with ❤️ by Pranav Passi
+    </footer>
+
+    <script src="algorithms/bubbleSort.js"></script>
+    <script src="algorithms/selectionSort.js"></script>
+    <script src="algorithms/insertionSort.js"></script>
+    <script src="algorithms/mergeSort.js"></script>
+    <script src="algorithms/quickSort.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
