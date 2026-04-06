@@ -11,6 +11,20 @@
     <h5 style="font-size:40px; font-weight:bold; text-align:center;">SORTING VISUALIZER</h5>
     <header class="control-panel">
         <div class="controls">
+            <label for="visual-type">Style:</label>
+            <select id="visual-type">
+                <option value="bars">Bars</option>
+                <option value="dots">Dots</option>
+            </select>
+
+            <label for="data-type">Data:</label>
+            <select id="data-type">
+                <option value="random">Random</option>
+                <option value="nearly-sorted">Nearly Sorted</option>
+                <option value="reversed">Reverse Sorted</option>
+                <option value="duplicates">Duplicates</option>
+            </select>
+
             <label for="algorithm-select">Algorithm:</label>
             <select id="algorithm-select">
                 <option value="bubble">Bubble Sort</option>
@@ -18,6 +32,8 @@
                 <option value="insertion">Insertion Sort</option>
                 <option value="merge">Merge Sort</option>
                 <option value="quick">Quick Sort</option>
+                <option value="heap">Heap Sort</option>
+                <option value="bucket">Bucket Sort</option>
             </select>
 
             <label for="size-slider">Number of Elements:</label>
@@ -35,10 +51,19 @@
             </select>
         </div>
         
+        <div class="custom-input-container">
+            <input type="text" id="custom-array-input" placeholder="e.g. 50, 20, 60 (5-50 items)">
+            <button id="set-custom-btn">Set</button>
+            <label for="csv-upload" style="background: #333; padding: 10px; border-radius: 5px; cursor: pointer; color: #fff; font-weight: 600;">Upload CSV</label>
+            <input type="file" id="csv-upload" accept=".csv" style="display:none;">
+        </div>
+        
         <div class="buttons">
-            <button id="generate-btn">Generate Array</button>
-            <button id="sort-btn">Sort</button>
+            <button id="generate-btn">Generate Selection</button>
+            <button id="sort-btn">Sort Visualizer</button>
             <button id="pause-btn">Pause</button>
+            <button id="race-btn">Race Algorithms</button>
+            <button id="benchmark-btn">Benchmarks (Graphs)</button>
         </div>
     </header>
 
@@ -46,31 +71,71 @@
         <div class="visualization">
             <div id="bars-container"></div>
         </div>
-        <div class="info-panel">
-            <h2 id="algorithm-name">Algorithm: Bubble Sort</h2>
-            <div class="stats">
-                <p>Comparisons: <span id="comparisons">0</span></p>
-                <p>Swaps: <span id="swaps">0</span></p>
-                <p>Time Taken: <span id="time-taken">0.00 seconds</span></p>
+        <div class="side-panel">
+            <div class="info-panel">
+                <h2 id="algorithm-name">Algorithm: Bubble Sort</h2>
+                <div class="stats">
+                    <p>Comparisons: <span id="comparisons">0</span></p>
+                    <p>Swaps: <span id="swaps">0</span></p>
+                    <p>Time Taken: <span id="time-taken">0.00 seconds</span></p>
+                </div>
+                <div class="complexity">
+                    <h3>Time Complexity</h3>
+                    <p>Best Case: <span id="best-case">O(n)</span></p>
+                    <p>Average Case: <span id="average-case">O(n²)</span></p>
+                    <p>Worst Case: <span id="worst-case">O(n²)</span></p>
+                </div>
             </div>
-            <div class="complexity">
-                <h3>Time Complexity</h3>
-                <p>Best Case: <span id="best-case">O(n)</span></p>
-                <p>Average Case: <span id="average-case">O(n²)</span></p>
-                <p>Worst Case: <span id="worst-case">O(n²)</span></p>
+            <div class="chart-panel">
+                <h3>Algorithm Comparisons (Est. Operations)</h3>
+                <div class="chart-container">
+                    <canvas id="comparisonChart"></canvas>
+                </div>
             </div>
         </div>
     </main>
 
     <footer>
-        Made with ❤️ by Pranav Passi
+        
     </footer>
 
+    <!-- Analytics Modal -->
+    <div id="analytics-modal" class="modal" style="display:none; position:fixed; z-index:100; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.8);">
+        <div class="modal-content" style="background:#1e1e1e; margin:5% auto; padding:20px; border-radius:10px; width:80%; max-height:80vh; overflow-y:auto; color: #fff;">
+            <span id="close-modal" style="color:#aaa; float:right; font-size:28px; font-weight:bold; cursor:pointer;">&times;</span>
+            <h2 id="modal-title">Analytics</h2>
+            
+            <div id="race-results" style="display:none;">
+                <table id="race-table" style="width:100%; border-collapse:collapse; margin-top:20px;">
+                    <thead><tr style="background:#555;">
+                        <th style="padding:10px; border:1px solid #777;">Algorithm</th>
+                        <th style="padding:10px; border:1px solid #777;">Time (ms)</th>
+                        <th style="padding:10px; border:1px solid #777;">Comparisons</th>
+                        <th style="padding:10px; border:1px solid #777;">Swaps</th>
+                        <th style="padding:10px; border:1px solid #777;">Winner?</th>
+                    </tr></thead>
+                    <tbody id="race-table-body"></tbody>
+                </table>
+            </div>
+            
+            <div id="benchmark-results" style="display:none; margin-top:20px;">
+                <h3>Comparisons vs Input Size</h3>
+                <div style="height:300px; width:100%;"><canvas id="benchmarkCompsChart"></canvas></div>
+                <h3 style="margin-top:40px;">Time Taken (ms) vs Input Size</h3>
+                <div style="height:300px; width:100%;"><canvas id="benchmarkTimeChart"></canvas></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
     <script src="algorithms/bubbleSort.js"></script>
     <script src="algorithms/selectionSort.js"></script>
     <script src="algorithms/insertionSort.js"></script>
     <script src="algorithms/mergeSort.js"></script>
     <script src="algorithms/quickSort.js"></script>
+    <script src="algorithms/heapSort.js"></script>
+    <script src="algorithms/bucketSort.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
